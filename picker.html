@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="description" content="Updated Moment-Jalali DATEPICKER">
+    <!--Base Code By saeidrnb Persian-DateRangePicker-->
+    <meta name="keywords" content="Moment.js, jalali, calendar, moment-jalali">
+    <meta name="author" content="Milad Kazemi">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Updated Moment-Jalali DATEPICKER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-v4-rtl/4.6.2-1/css/bootstrap.min.css" integrity="sha512-NrKZWxJKkRtK6smeXkYtFsgPIrTqWTjaJ6gcZKjb9jwNSJs9r2NY4GcEYhTBQDM1GUNlcbqQVYogz/GjwO/LHA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="assets/css/daterangepicker.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="assets/css/datepicker-theme.css" rel="stylesheet" type="text/css" media="all"  />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .ribbon{
+            min-height: 20px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid #e3e3e3;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+        }
+    </style>
+</head>
+<body style="direction:rtl;text-align: right">
+    <div class="container" style="margin-top: 10%;">
+
+        <div >
+            <h2>انتخاب تاریخ در بازه زمانی</h2>
+            <br />
+            <div class="row ribbon">
+                <div class="col-sm-3">
+                    <label class="control-label">تاریخ ورود</label>
+                    <input type="text" class="form-control date-inputs" id="dateRangePicker" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">تاریخ خروج</label>
+                    <input type="text" class="form-control" id="dateRangePickerEnd" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">تاریخ تبدیل شده</label>
+                    <span class="date-hover" style="display:block"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">تاریخ انتخاب شده</label>
+                    <span class="date-select" style="display:block"></span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div >
+            <h3>انتخاب تاریخ بصورت یکتا</h3>
+            <br />
+            <div class="row ribbon">
+                <div class="col-sm-3">
+                    <label class="control-label">تاریخ تولد شمسی</label>
+                    <input type="text" class="form-control jalali-datepicker" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">تاریخ تولد میلادی</label>
+                    <input type="text" class="form-control ga-datepicker" />
+                </div>
+            </div>
+        </div>
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="node_modules/moment/min/moment.min.js"></script>
+    <script src="assets/js/moment-jalaali.js"></script><!--Moment/Moment require bog fixed-->
+    <script src="assets/js/daterangepicker-fa-ex.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            var night;
+            var isRtl = true;
+
+
+            $(".date-inputs").each(function () {
+
+
+                var $this = $(this);
+                var today = moment().startOf("day");
+                var value = $this.val();
+                var ranges = {
+                    Today: [moment(), moment()],
+                    Yesterday: [
+                        moment().subtract(1, "days"),
+                        moment().subtract(1, "days"),
+                    ],
+                    "Last 7 Days": [moment().subtract(6, "days"), moment()],
+                    "Last 30 Days": [moment().subtract(29, "days"), moment()],
+                    "This Month": [
+                        moment().startOf("month"),
+                        moment().endOf("month"),
+                    ],
+                    "Last Month": [
+                        moment().subtract(1, "month").startOf("month"),
+                        moment().subtract(1, "month").endOf("month"),
+                    ],
+                };
+
+                var single = $this.data("single");
+                var monthYearDrop = $this.data("show-dropdown");
+                var format = $this.data("format");
+                var separator = $this.data("separator");
+                var timePicker = $this.data("time-picker");
+                var timePickerIncrement = $this.data("time-gap");
+                var advncdRange = $this.data("advanced-range");
+                var futureDisable = $this.data("future-disable");
+                var maxDate = $this.data("max-date");
+
+                var dateFormat = !format ? 'jYYYY/jMM/jDD' : format;
+                var dateFrom = false ? moment("") : undefined;
+                var dateTo = false ? moment("") : undefined;
+
+                single = !single ? false : single;
+                monthYearDrop = !monthYearDrop ? false : monthYearDrop;
+                maxDate = !futureDisable ? maxDate : today;
+                timePickerIncrement = !timePickerIncrement ? 1 : timePickerIncrement;
+                ranges = !advncdRange ? "" : ranges;
+
+                $this.daterangepicker({
+                    clearLabel: 'Clear',
+                    singleDatePicker: single,
+                    showDropdowns: monthYearDrop,
+                    autoUpdateInput: !!(dateFrom && dateTo),
+                    minDate: moment(),
+                    maxDate: maxDate,
+                    timePickerIncrement: timePickerIncrement,
+                    ranges: ranges,
+                    opens: isRtl ? 'left' : 'right',
+                    locale: {
+                        format: dateFormat,
+                        separator: separator,
+                        applyLabel: "انتخاب",
+                        cancelLabel: "لغو",
+                    },
+                    startDate: dateFrom,
+                    endDate: dateTo,
+                    jalaali: isRtl,
+                    language: 'fa',
+                    showDropdowns: true
+                }).on('apply.daterangepicker', function (ev, picker) {
+                    night = picker.endDate.diff(picker.startDate, 'days');
+                    if (night > 0) {
+                        $(this).val(picker.startDate.format(dateFormat));
+                        $('#dateRangePickerEnd').val(picker.endDate.format(dateFormat));
+                    } else {
+                        $(this).val('')
+                    }
+                });
+
+                if (single) {
+                    $this.on("apply.daterangepicker", function (ev, picker) {
+                        $('.tooltip').hide();
+                        $this.val(picker.startDate.format(dateFormat));
+                    });
+                } else {
+                    $this.on("apply.daterangepicker", function (ev, picker) {
+                        $('.tooltip').hide();
+                        $this.val(
+                            picker.startDate.format(dateFormat)
+                        );
+                    });
+                }
+
+                $this.on("cancel.daterangepicker", function (ev, picker) {
+                    $this.val("");
+                });
+            });
+
+            $('.ga-datepicker').daterangepicker({
+                clearLabel: 'Clear',
+                // autoUpdateInput: !!(dateFrom && dateTo),
+                //minDate: moment(),
+                autoApply: true,
+                opens: 'right',
+                singleDatePicker: true,
+                showDropdowns: true,
+                language: 'en'
+            }).on('apply.daterangepicker', function () {
+                $('.tooltip').hide();
+                $('.date-select').text($(this).val());
+            });
+
+            $('.jalali-datepicker').daterangepicker({
+                clearLabel: 'Clear',
+                autoApply: true,
+                opens: 'left',
+                singleDatePicker: true,
+                showDropdowns: true,
+                jalaali: true,
+                language: 'fa'
+            }).on('apply.daterangepicker', function () {
+                $('.tooltip').hide();
+                $('.date-select').text($(this).val());
+            });
+
+            $(document).on('mouseover', '.daterangepicker .calendar td', function () {
+                var gagDate = $(this).attr('data-original-title');
+                $('.date-hover').text('');
+                $('.date-hover').text(gagDate);
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+
+            $('body').tooltip({
+                selector: '[data-toggle="tooltip"]'
+            }).click(function () {
+                $('.tooltip').hide();
+            });
+
+        });
+    </script>
+</body>
+</html>

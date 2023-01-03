@@ -1,0 +1,37 @@
+{
+  "name": "datepicker-moment-jalali",
+  "version": "1.0.0",
+  "description": "jalali date range picker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miladkazemi-com/datepicker-moment-jalali.git"
+  },
+  "keywords": [
+    "datepicker",
+    "moment.js",
+    "momentjs-moment-jalali",
+    "halali",
+    "khorshidi",
+    "persian",
+    "calendar",
+    "gregorian",
+    "to",
+    "jalali",
+    "date",
+    "convertor"
+  ],
+  "author": "Milad Kazemi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miladkazemi-com/datepicker-moment-jalali/issues"
+  },
+  "homepage": "https://github.com/miladkazemi-com/datepicker-moment-jalali#readme",
+  "dependencies": {
+    "moment": "^2.29.4",
+    "moment-jalaali": "^0.9.6"
+  }
+}
